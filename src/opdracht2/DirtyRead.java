@@ -14,7 +14,7 @@ import java.sql.Statement;
  *
  * @author geddyS
  */
-public class Unrepeatable {
+public class DirtyRead {
     public void main() {
         // Maak en start thread 1
         new Thread(new Runnable() {
@@ -24,17 +24,15 @@ public class Unrepeatable {
                     // Schrijf hier je eigen code
                     // Random wachttijd
                     try{
-                        Thread.sleep(1000);
                         String dbUrl = "jdbc:mysql://localhost:3307/infanl08";
                         Connection con = DriverManager.getConnection(dbUrl,"root","root");
                         con.setAutoCommit(false);
                         con.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
                         Statement query = con.createStatement();
                         System.out.println("Verbinding gemaakt");
-                        String sql = "UPDATE product SET instock = 55 WHERE productname = 'Macbook Pro';";
+                        String sql = "UPDATE product SET instock = 40 WHERE productname = 'Macbook';";
 //                        String sql = "INSERT INTO product VALUES ('Samsung s4',40);";
                         query.execute(sql);
-                        con.commit();
                         
                         
                         // Genereer een getal tussen de 0 t/m 10.
@@ -56,7 +54,12 @@ public class Unrepeatable {
 
             public void run() {
                 while (true) {
+                    // Schrijf hier je eigen code
+                        
+
+                    // Random wachttijd
                     try {
+                        Thread.sleep(1000);
                         String dbUrl = "jdbc:mysql://localhost:3307/infanl08";
                         Connection con = DriverManager.getConnection(dbUrl,"root","root");
                         con.setAutoCommit(false);
@@ -66,16 +69,17 @@ public class Unrepeatable {
                         String sql = "Select * from product";
                         ResultSet a = query.executeQuery(sql);
                         
-                        printResult(a);
-                        
-                        Thread.sleep(1000);
-                        a = query.executeQuery(sql);
-                        printResult(a);
-                        
-                        
+                            while (a.next()) {
+                              String userName = a.getString(1);
+                              int firstName = a.getInt(2);
+                              System.out.println(userName+":  "+firstName);
+                              // ... do something with these variables ...
+                            }
+                        // Genereer een getal tussen de 0 t/m 10.
                         int wachtTijd = 5;
                         System.out.println(Thread.currentThread().getName() + ": Slaap " +
                                 wachtTijd + " sec");
+                        System.out.println("#######################################################");
                         // Slaap wachtTijd seconden
                         Thread.sleep(wachtTijd * 1000);
                     } catch (Exception e) {
@@ -84,17 +88,5 @@ public class Unrepeatable {
             }
         }, "Thread 2").start();
     }
-public static void printResult(ResultSet a){
-    try{
-        while (a.next()){
-            String userName = a.getString(1);
-            int firstName = a.getInt(2);
-            System.out.println(userName+":  "+firstName);
-        }
-    }catch(Exception e){
-    }
-    System.out.println("#######################################################");
-    }
-    
     
 }

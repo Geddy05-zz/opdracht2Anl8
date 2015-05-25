@@ -15,8 +15,8 @@ import java.sql.Timestamp;
  *
  * @author geddyS
  */
-public class deadlock {
-     public static void main(String[] args) {
+public class Deadlock {
+     public void main() {
         // Maak en start thread 1
         new Thread(new Runnable() {
             @Override
