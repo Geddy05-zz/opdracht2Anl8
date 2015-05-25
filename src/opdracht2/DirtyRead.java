@@ -30,7 +30,7 @@ public class DirtyRead {
                         con.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
                         Statement query = con.createStatement();
                         System.out.println("Verbinding gemaakt");
-                        String sql = "UPDATE product SET instock = 40 WHERE productname = 'Macbook';";
+                        String sql = "UPDATE product SET instock = 501 WHERE productname = 'Macbook';";
 //                        String sql = "INSERT INTO product VALUES ('Samsung s4',40);";
                         query.execute(sql);
                         

@@ -24,7 +24,7 @@ public class Opdracht2 {
             dr.main();
         }else if (i ==2){
             Phantom ph = new Phantom();
-//            ph.main();
+            ph.main();
         }else if (i == 3){
             Deadlock de = new Deadlock();
             de.main();
